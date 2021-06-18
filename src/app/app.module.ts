@@ -11,8 +11,10 @@ import {MatIconModule} from '@angular/material/icon';
 import { TreeMakingComponent } from './tree-making/tree-making.component';
 import {MatTreeModule} from '@angular/material/tree';
 import {MatCheckboxModule} from '@angular/material/checkbox';
-import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatFormFieldModule } from '@angular/material/form-field';
+import {MatInputModule} from '@angular/material/input';
 import {MatButtonModule} from '@angular/material/button';
+import {MatMenuModule} from '@angular/material/menu';
 
 const routes: Routes = [
   {path: '', component: MainPageComponent},
@@ -35,7 +37,9 @@ const routes: Routes = [
     MatTreeModule,
     MatCheckboxModule,
     MatFormFieldModule,
-    MatButtonModule
+    MatButtonModule,
+    MatInputModule,
+    MatMenuModule
   ],
   exports: [
     RouterModule
