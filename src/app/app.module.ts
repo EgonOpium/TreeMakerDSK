@@ -15,23 +15,30 @@ import {MatFormFieldModule } from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {MatButtonModule} from '@angular/material/button';
 import {MatMenuModule} from '@angular/material/menu';
+import { TreeMakingDialogComponent } from './tree-making-dialog/tree-making-dialog.component';
+import { FormsModule } from '@angular/forms';
+import {MatDialogModule} from '@angular/material/dialog';
+import {MatSelectModule} from '@angular/material/select';
 
 const routes: Routes = [
   {path: '', component: MainPageComponent},
-  {path: 'tree-making', component: TreeMakingComponent}
+  {path: 'tree-making', component: TreeMakingComponent},
+  {path: 'tree-making-dialog', component: TreeMakingDialogComponent}
 ];
 
 @NgModule({
   declarations: [
     AppComponent,
     MainPageComponent,
-    TreeMakingComponent
+    TreeMakingComponent,
+    TreeMakingDialogComponent
   ],
   imports: [
     RouterModule.forRoot(routes),
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+    MatSelectModule,
     MatToolbarModule,
     MatIconModule,
     MatTreeModule,
@@ -39,7 +46,9 @@ const routes: Routes = [
     MatFormFieldModule,
     MatButtonModule,
     MatInputModule,
-    MatMenuModule
+    MatMenuModule,
+    FormsModule,
+    MatDialogModule
   ],
   exports: [
     RouterModule
