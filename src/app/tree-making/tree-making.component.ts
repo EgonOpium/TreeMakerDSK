@@ -11,7 +11,6 @@ import { DialogData, TreeMakingDialogComponent } from '../tree-making-dialog/tre
  */
  export class EventNode {
   id: string;
-  desc?: string;
   failure_rate?: number;
   k?: number;
   plus?:boolean;
@@ -21,27 +20,10 @@ import { DialogData, TreeMakingDialogComponent } from '../tree-making-dialog/tre
 
 let TREE_DATA: EventNode[] = [
   {
-    id: 'EventFirst',
-    type: 'BasicEvent',
-    desc: 'egg2',
-    failure_rate: 0.5,
-    subelements: [
-      {
-        id: 'KNGate',
-        type: 'KNGate',
-        failure_rate: 0.5,
-        subelements:[
-          {id: 'BasicEvent2',
-            type: 'BasicEvent',
-            failure_rate: 0.5,
-            subelements:[]},
-          {id: 'BasicEvent3',
-            type: 'BasicEvent',
-            failure_rate: 0.5,
-            subelements:[]}
-        ]
-      },
-    ]
+    id: 'TopEvent',
+    type: 'BasicEvent', 
+    failure_rate: 100,
+    subelements: []
   }
 ];
 
@@ -162,7 +144,7 @@ export class TreeMakingComponent implements OnInit {
       if(result != null){
         this.dialogData = result;
         
-        this.addGate(node,this.dialogData.type,this.dialogData.desc,this.dialogData.k);
+        this.addGate(node,this.dialogData.type,this.dialogData.k);
       }
     });
   }
@@ -176,7 +158,7 @@ export class TreeMakingComponent implements OnInit {
       console.log('The dialog was closed');
       if(result != null){
         this.dialogData = result;
-        this.addEvent(node, this.dialogData.type, this.dialogData.failure_rate);
+        this.addEvent(node, this.dialogData.type, this.dialogData.name, this.dialogData.failure_rate);
       }
     });
   }
@@ -217,22 +199,28 @@ export class TreeMakingComponent implements OnInit {
     });
     console.log("breadcrumbs ", breadcrumbs);
   }
-
+  
+  replacer(name:any, val:any) {
+    if ( name === "failure_rate" ) {
+        return Number(val.toString());
+    } 
+    return val;
+  };
   generateDownloadJsonUri() {
-    this.theJSON = JSON.stringify(TREE_DATA, null, '\t');
+    this.theJSON = JSON.stringify(TREE_DATA, this.replacer, '\t');
     var newStr = this.theJSON.substring(1, this.theJSON.length-1);
     
     var uri = this.sanitizer.bypassSecurityTrustUrl("data:text/json;charset=UTF-8," + encodeURIComponent(newStr));
     this.downloadJsonHref = uri;
   }
 
-  addEvent(node:EventNode, type:string, fail:number){
-    this.dataSource.add({id: type, failure_rate:fail, type: type, subelements: []},node);
+  addEvent(node:EventNode, type:string, name:string,  fail:number){
+    this.dataSource.add({id: name, failure_rate:fail, type: type, subelements: []},node);
     console.log(node.subelements.length);
   }
 
-  addGate(node:EventNode,type:string, descr?:string,k? : number){
-    this.dataSource.add({id: type, failure_rate:0.2, type: type, k: 2, subelements: []},node);
+  addGate(node:EventNode,type:string, k? : number){
+    this.dataSource.add({id: type, type: type, k: 2, subelements: []},node);
   }
 
   remove(node: EventNode) {

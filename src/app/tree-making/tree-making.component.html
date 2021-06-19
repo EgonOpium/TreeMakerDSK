@@ -16,21 +16,20 @@
           <mat-icon>more_vert</mat-icon>
         </button>
         <mat-menu #menu="matMenu">
-          <button mat-menu-item *ngIf='((node.type === "BasicEvent") || (node.type === "ExternalEvent")) && (node.subelements.length === 0)' (click)="openAddGateDialog(node)">Add gate dialog</button>
+          <button mat-menu-item *ngIf='((node.type === "BasicEvent") || (node.type === "ExternalEvent")) && (node.subelements.length === 0)' (click)="openAddGateDialog(node)">Dodaj bramkę</button>
           <button mat-menu-item 
           *ngIf='(node.type === "KNGate") ||  
           (node.type === "ANDGate") || 
           (node.type ==="NANDGate") || 
           (node.type ==="ORGate")|| 
           (node.type ==="NORGate")'
-          (click)="openAddEventDialog(node)">Add event dialog</button>
-          <button mat-menu-item (click)="remove(node)">Remove</button>
+          (click)="openAddEventDialog(node)">Dodaj wydarzenie</button>
+          <button mat-menu-item (click)="remove(node)">Usuń</button>
         </mat-menu>
       </li>
       
     </mat-tree-node>
   
-    <!-- This is the tree node template for expandable nodes -->
     <mat-nested-tree-node *matTreeNodeDef="let node; when: hasChild">
       <li>
     
@@ -48,15 +47,15 @@
             <mat-icon>more_vert</mat-icon>
           </button>
           <mat-menu #menu="matMenu">
-            <button mat-menu-item *ngIf='((node.type === "BasicEvent") || (node.type === "ExternalEvent")) && (node.subelements.length === 0)' (click)="openAddGateDialog(node)">Add gate dialog</button>
+            <button mat-menu-item *ngIf='((node.type === "BasicEvent") || (node.type === "ExternalEvent")) && (node.subelements.length === 0)' (click)="openAddGateDialog(node)">Dodaj bramkę</button>
             <button mat-menu-item 
             *ngIf='(node.type === "KNGate") ||  
             (node.type === "ANDGate") || 
             (node.type ==="NANDGate") || 
             (node.type ==="ORGate")|| 
             (node.type ==="NORGate")'
-            (click)="openAddEventDialog(node)">Add event dialog</button>
-            <button mat-menu-item (click)="remove(node)">Remove</button>
+            (click)="openAddEventDialog(node)">Dodaj wydarzenie</button>
+            <button mat-menu-item (click)="remove(node)">Usuń</button>
           </mat-menu>
         </div>
     

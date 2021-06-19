@@ -11,17 +11,7 @@
         <mat-option value="ORGate">OR Gate</mat-option>
         <mat-option value="NORGate">NOR Gate</mat-option>
       </mat-select>
-    </mat-form-field>
-    <mat-form-field>
-      <mat-label>Nazwa rodzica</mat-label>
-      <input matInput readonly [(ngModel)]="data.id">
-    </mat-form-field>
-    <mat-form-field>
-      <mat-label>Opis</mat-label>
-      <input matInput [(ngModel)]="data.desc">
-    </mat-form-field>  
-      
-    
+    </mat-form-field> 
     <mat-form-field *ngIf='data.type === "KNGate"'>
       <mat-label>K</mat-label>
       <input matInput [(ngModel)]="data.k">
@@ -29,7 +19,7 @@
   </div>
 
   <div mat-dialog-actions>
-    <button mat-button (click)="onNoClick()">No Thanks</button>
+    <button mat-button (click)="onNoClick()">Wyjdź</button>
     <button mat-button [mat-dialog-close]="data" cdkFocusInitial>Ok</button>
   </div>
 </div>
@@ -39,15 +29,11 @@
   <div mat-dialog-content>
     <!-- <p>Nowe wydarzenie</p> -->
     <mat-form-field>
-      <mat-label>Nazwa rodzica</mat-label>
-      <input matInput readonly [(ngModel)]="data.id">
+      <mat-label>Nazwa</mat-label>
+      <input matInput [(ngModel)]="data.name">
     </mat-form-field>
     <mat-form-field>
-      <mat-label>Opis</mat-label>
-      <input matInput [(ngModel)]="data.desc">
-    </mat-form-field>
-    <mat-form-field>
-      <mat-label>Prawdopodobieństwo</mat-label>
+      <mat-label>Awaryjność</mat-label>
       <input matInput [(ngModel)]="data.failure_rate">
     </mat-form-field>
     <mat-form-field appearance="fill">
@@ -61,7 +47,7 @@
   </div>
 
   <div mat-dialog-actions>
-    <button mat-button (click)="onNoClick()">No Thanks</button>
+    <button mat-button (click)="onNoClick()">Wyjdź</button>
     <button mat-button [mat-dialog-close]="data" cdkFocusInitial>Ok</button>
   </div>
 </div>

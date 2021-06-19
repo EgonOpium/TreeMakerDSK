@@ -3,6 +3,7 @@ import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog
 
 export interface DialogData {
   id: string;
+  name: string;
   type: string;
   failure_rate: number;
   desc?: string;
