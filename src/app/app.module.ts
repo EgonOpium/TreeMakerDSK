@@ -19,6 +19,8 @@ import { TreeMakingDialogComponent } from './tree-making-dialog/tree-making-dial
 import { FormsModule } from '@angular/forms';
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatSelectModule} from '@angular/material/select';
+import {MatCardModule} from '@angular/material/card';
+
 
 const routes: Routes = [
   {path: '', component: MainPageComponent},
@@ -48,7 +50,8 @@ const routes: Routes = [
     MatInputModule,
     MatMenuModule,
     FormsModule,
-    MatDialogModule
+    MatDialogModule,
+    MatCardModule
   ],
   exports: [
     RouterModule

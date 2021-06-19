@@ -16,10 +16,14 @@
           <mat-icon>more_vert</mat-icon>
         </button>
         <mat-menu #menu="matMenu">
-          <button mat-menu-item (click)="openAddGateDialog(node)">Add gate dialog</button>
-          <button mat-menu-item (click)="openAddEventDialog(node)">Add event dialog</button>
-          <button mat-menu-item *ngIf='(node.type == "event") && (node.children.length === 0)' (click)="addGate(node)">Add Gate</button>
-          <button mat-menu-item *ngIf='node.type == "gate"' (click)="addEvent(node)">Add Event</button>
+          <button mat-menu-item *ngIf='((node.type === "BasicEvent") || (node.type === "ExternalEvent")) && (node.subelements.length === 0)' (click)="openAddGateDialog(node)">Add gate dialog</button>
+          <button mat-menu-item 
+          *ngIf='(node.type === "KNGate") ||  
+          (node.type === "ANDGate") || 
+          (node.type ==="NANDGate") || 
+          (node.type ==="ORGate")|| 
+          (node.type ==="NORGate")'
+          (click)="openAddEventDialog(node)">Add event dialog</button>
           <button mat-menu-item (click)="remove(node)">Remove</button>
         </mat-menu>
       </li>
@@ -44,10 +48,14 @@
             <mat-icon>more_vert</mat-icon>
           </button>
           <mat-menu #menu="matMenu">
-            <button mat-menu-item (click)="openAddGateDialog(node)">Add gate dialog</button>
-            <button mat-menu-item (click)="openAddEventDialog(node)">Add event dialog</button>
-            <button mat-menu-item *ngIf='(node.type == "event") && (node.children.length === 0)' (click)="addGate(node)">Add Gate</button>
-            <button mat-menu-item *ngIf='node.type == "gate"' (click)="addEvent(node)">Add Event</button>
+            <button mat-menu-item *ngIf='((node.type === "BasicEvent") || (node.type === "ExternalEvent")) && (node.subelements.length === 0)' (click)="openAddGateDialog(node)">Add gate dialog</button>
+            <button mat-menu-item 
+            *ngIf='(node.type === "KNGate") ||  
+            (node.type === "ANDGate") || 
+            (node.type ==="NANDGate") || 
+            (node.type ==="ORGate")|| 
+            (node.type ==="NORGate")'
+            (click)="openAddEventDialog(node)">Add event dialog</button>
             <button mat-menu-item (click)="remove(node)">Remove</button>
           </mat-menu>
         </div>

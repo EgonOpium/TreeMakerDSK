@@ -1,35 +1,46 @@
-<div *ngIf='data.type === "gate"'>
+<div *ngIf='data.dialog === "gate"'>
   <h1 mat-dialog-title>Dodaj bramkę logiczną do: {{data.id}}</h1>
   <div mat-dialog-content>
     <!-- <p>Nowa bramka</p> -->
+    <mat-form-field appearance="fill">
+      <mat-label>Typ</mat-label>
+      <mat-select  [(ngModel)]="data.type">
+        <mat-option value="KNGate">KN Gate</mat-option>
+        <mat-option value="ANDGate">AND Gate</mat-option>
+        <mat-option value="NANDGate">NAND Gate</mat-option>
+        <mat-option value="ORGate">OR Gate</mat-option>
+        <mat-option value="NORGate">NOR Gate</mat-option>
+      </mat-select>
+    </mat-form-field>
     <mat-form-field>
-      <mat-label>Nazwa</mat-label>
-      <input matInput [(ngModel)]="data.id">
+      <mat-label>Nazwa rodzica</mat-label>
+      <input matInput readonly [(ngModel)]="data.id">
     </mat-form-field>
     <mat-form-field>
       <mat-label>Opis</mat-label>
       <input matInput [(ngModel)]="data.desc">
-    </mat-form-field>
-    <mat-form-field appearance="fill">
-      <mat-label>Select</mat-label>
-      <mat-select [(ngModel)]="data.type">
-        <mat-option  value="kn">KN Gate</mat-option>
-        <mat-option value="or">OR Gate</mat-option>
-      </mat-select>
+    </mat-form-field>  
+      
+    
+    <mat-form-field *ngIf='data.type === "KNGate"'>
+      <mat-label>K</mat-label>
+      <input matInput [(ngModel)]="data.k">
     </mat-form-field>
   </div>
+
   <div mat-dialog-actions>
     <button mat-button (click)="onNoClick()">No Thanks</button>
     <button mat-button [mat-dialog-close]="data" cdkFocusInitial>Ok</button>
   </div>
 </div>
-<div *ngIf='data.type === "event"'>
+
+<div *ngIf='data.dialog === "event"'>
   <h1 mat-dialog-title>Dodaj wydarzenie do bramki: {{data.id}}</h1>
   <div mat-dialog-content>
     <!-- <p>Nowe wydarzenie</p> -->
     <mat-form-field>
-      <mat-label>Nazwa</mat-label>
-      <input matInput [(ngModel)]="data.id">
+      <mat-label>Nazwa rodzica</mat-label>
+      <input matInput readonly [(ngModel)]="data.id">
     </mat-form-field>
     <mat-form-field>
       <mat-label>Opis</mat-label>
@@ -39,16 +50,18 @@
       <mat-label>Prawdopodobieństwo</mat-label>
       <input matInput [(ngModel)]="data.failure_rate">
     </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Typ</mat-label>
+      <mat-select  [(ngModel)]="data.type">
+        <mat-option value="BasicEvent">Basic Event</mat-option>
+        <mat-option value="ExternalEvent">External Event</mat-option>
+      </mat-select>
+    </mat-form-field>
+    
   </div>
+
   <div mat-dialog-actions>
     <button mat-button (click)="onNoClick()">No Thanks</button>
     <button mat-button [mat-dialog-close]="data" cdkFocusInitial>Ok</button>
   </div>
 </div>
-
-<!-- id: string;
-desc?: string;
-failure_rate?: number;
-children: EventNode[];
-plus?:boolean;
-type: string; //event / gate -->

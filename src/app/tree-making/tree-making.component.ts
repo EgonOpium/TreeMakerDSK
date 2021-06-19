@@ -9,95 +9,40 @@ import { DialogData, TreeMakingDialogComponent } from '../tree-making-dialog/tre
  * Food data with nested structure.
  * Each node has a name and an optional list of children.
  */
-export interface Gate{
-}
- export interface BasicEvent {
-  id:           string;
-  desc:         string;
-  failure_rate: number;
-  gate:  Gate;
-}
-export interface ORGate extends Gate{
-  id:           string;
-  desc:         string;
-  failure_rate: number;
-  subelements:  BasicEvent[];
-}
-export interface KNGate extends Gate{
-  id:           string;
-  desc:         string;
-  failure_rate: number;
-  k:            number;
-  subelements:  BasicEvent[];
-}
-
-
- interface EventNode {
+ export class EventNode {
   id: string;
   desc?: string;
   failure_rate?: number;
-  children: EventNode[];
+  k?: number;
   plus?:boolean;
   type: string; //event / gate
+  subelements: EventNode[];
 }
 
-let BasicEvent: EventNode[] = [
+let TREE_DATA: EventNode[] = [
   {
     id: 'EventFirst',
-    type: 'event',
+    type: 'BasicEvent',
     desc: 'egg2',
     failure_rate: 0.5,
-    children: [
-      {id: 'BasicEvent1',
-      type: 'event',
-      failure_rate: 0.5,
-      children:[]
-      },
-      {id: 'BasicEvent2',
-      type: 'event',
-      failure_rate: 0.5,
-      children:[]},
-      {id: 'BasicEvent3',
-      type: 'event',
-      failure_rate: 0.5,
-      children:[]},
-    ]
-  }, {
-    id: 'EventSecond',
-    failure_rate: 0.5,
-    type: 'event',
-    children: [
+    subelements: [
       {
-        id: 'BasicEvent4',
-        type: 'event',
+        id: 'KNGate',
+        type: 'KNGate',
         failure_rate: 0.5,
-        children: [
-          {id: 'BasicEvent6',
-          type: 'event',
-          failure_rate: 0.5,
-          children:[]},
-          {id: 'BasicEvent7',
-          type: 'event',
-          failure_rate: 0.5,
-          children:[]},
-        ]
-      }, {
-        id: 'BasicEvent5',
-        type: 'event',
-        failure_rate: 0.5,
-        children: [
-          {id: 'BasicEvent8',
-          type: 'event',
-          failure_rate: 0.5,
-          children:[]},
-          {id: 'BasicEvent9',
-          type: 'event',
-          failure_rate: 0.5,
-          children:[]},
+        subelements:[
+          {id: 'BasicEvent2',
+            type: 'BasicEvent',
+            failure_rate: 0.5,
+            subelements:[]},
+          {id: 'BasicEvent3',
+            type: 'BasicEvent',
+            failure_rate: 0.5,
+            subelements:[]}
         ]
       },
     ]
-  },
+  }
 ];
 
 
@@ -112,21 +57,21 @@ export class TreeDataSource extends MatTreeNestedDataSource<EventNode> {
   /** Add node as child of parent */
   public add(node: EventNode, parent: EventNode) {
     // add dummy root so we only have to deal with `FoodNode`s
-    const newTreeData = { id: "Dummy Root", children: this.data, failure_rate: 0.2, type: 'event' };
+    const newTreeData = { id: "Dummy Root", subelements: this.data, failure_rate: 0.2, type: 'event' };
     this._add(node, parent, newTreeData);
-    this.data = newTreeData.children;
+    this.data = newTreeData.subelements;
   }
 
   protected _add(newNode: EventNode, parent: EventNode, tree: EventNode):any {
     if (tree === parent) {
       console.log(
-        `replacing children array of '${parent.id}', adding ${newNode.id}`
+        `replacing subelements array of '${parent.id}', adding ${newNode.id}`
       );
-      tree.children = [...tree.children!, newNode];
+      tree.subelements = [...tree.subelements!, newNode];
       this.treeControl.expand(tree);
       return true;
     }
-    if (!tree.children) {
+    if (!tree.subelements) {
       console.log(`reached leaf node '${tree.id}', backing out`);
       return false;
     }
@@ -134,20 +79,20 @@ export class TreeDataSource extends MatTreeNestedDataSource<EventNode> {
   }
 
   public remove(node: EventNode) {
-    const newTreeData = { name: "Dummy Root", children: this.data, id: node.id, failure_rate: node.failure_rate, type: 'event' };
+    const newTreeData = { name: "Dummy Root", subelements: this.data, id: node.id, failure_rate: node.failure_rate, type: 'event' };
     this._remove(node, newTreeData);
-    this.data = newTreeData.children;
+    this.data = newTreeData.subelements;
   }
 
   _remove(node: EventNode, tree: EventNode): boolean {
-    if (!tree.children) {
+    if (!tree.subelements) {
       return false;
     }
-    const i = tree.children.indexOf(node);
+    const i = tree.subelements.indexOf(node);
     if (i > -1) {
-      tree.children = [
-        ...tree.children.slice(0, i),
-        ...tree.children.slice(i + 1)
+      tree.subelements = [
+        ...tree.subelements.slice(0, i),
+        ...tree.subelements.slice(i + 1)
       ];
       this.treeControl.collapse(node);
       console.log(`found ${node.id}, removing it from`, tree);
@@ -159,7 +104,7 @@ export class TreeDataSource extends MatTreeNestedDataSource<EventNode> {
   protected update(tree: EventNode, predicate: (n: EventNode) => boolean) {
     let updatedTree: EventNode, updatedIndex: number;
 
-    tree.children!.find((node, i) => {
+    tree.subelements!.find((node, i) => {
       if (predicate(node)) {
         console.log(`creating new node for '${node.id}'`);
         updatedTree = { ...node };
@@ -171,8 +116,8 @@ export class TreeDataSource extends MatTreeNestedDataSource<EventNode> {
     });
 
     if (updatedTree!) {
-      console.log(`replacing node '${tree.children![updatedIndex!].id}'`);
-      tree.children![updatedIndex!] = updatedTree!;
+      console.log(`replacing node '${tree.subelements![updatedIndex!].id}'`);
+      tree.subelements![updatedIndex!] = updatedTree!;
       return true;
     }
     return false;
@@ -194,13 +139,13 @@ export class TreeDataSource extends MatTreeNestedDataSource<EventNode> {
   styleUrls: ['./tree-making.component.css'],
 })
 export class TreeMakingComponent implements OnInit {
-  treeControl = new NestedTreeControl<EventNode>(node => node.children);
-  dataSource = new TreeDataSource(this.treeControl, BasicEvent);
+  treeControl = new NestedTreeControl<EventNode>(node => node.subelements);
+  dataSource = new TreeDataSource(this.treeControl, TREE_DATA);
   downloadJsonHref: any;
   theJSON: string;
 
   id: number;
-  desc: string;
+ 
   dialogData: DialogData;
   constructor(private sanitizer: DomSanitizer, public dialog: MatDialog) 
   {
@@ -209,7 +154,7 @@ export class TreeMakingComponent implements OnInit {
   openAddGateDialog(node: EventNode): void {
     const dialogRef = this.dialog.open(TreeMakingDialogComponent, {
       width: '450px',
-      data: {id: node.id, desc: this.desc, type: "gate"}
+      data: {id: node.id, dialog: "gate"}
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -217,20 +162,21 @@ export class TreeMakingComponent implements OnInit {
       if(result != null){
         this.dialogData = result;
         
+        this.addGate(node,this.dialogData.type,this.dialogData.desc,this.dialogData.k);
       }
     });
   }
   openAddEventDialog(node: EventNode): void {
     const dialogRef = this.dialog.open(TreeMakingDialogComponent, {
       width: '450px',
-      data: {id: node.id, desc: this.desc, type: "event"}
+      data: {id: node.id, dialog: "event"}
     });
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
       if(result != null){
         this.dialogData = result;
-        
+        this.addEvent(node, this.dialogData.type, this.dialogData.failure_rate);
       }
     });
   }
@@ -238,7 +184,7 @@ export class TreeMakingComponent implements OnInit {
   ngOnInit(): void {
   }
   
-  hasChild = (_: number, node: EventNode) => !!node.children && node.children.length > 0;
+  hasChild = (_: number, node: EventNode) => !!node.subelements && node.subelements.length > 0;
   clickedPlus = (_:boolean, node:EventNode) => node.plus;
 
 
@@ -248,7 +194,7 @@ export class TreeMakingComponent implements OnInit {
         if (array[i].id === id) {
           return [array[i]];
         }
-        const a = this.getAncestors(array[i].children, id);
+        const a = this.getAncestors(array[i].subelements, id);
         if (a !== null) {
           a.unshift(array[i]);
           return a;
@@ -272,27 +218,21 @@ export class TreeMakingComponent implements OnInit {
     console.log("breadcrumbs ", breadcrumbs);
   }
 
-  makeList(){
-    BasicEvent.forEach(element => {
-      
-    });
-  }
-
   generateDownloadJsonUri() {
-    this.theJSON = JSON.stringify({BasicEvent});
-    console.log(this.theJSON)
-    var uri = this.sanitizer.bypassSecurityTrustUrl("data:text/json;charset=UTF-8," + encodeURIComponent(this.theJSON));
+    this.theJSON = JSON.stringify(TREE_DATA, null, '\t');
+    var newStr = this.theJSON.substring(1, this.theJSON.length-1);
+    
+    var uri = this.sanitizer.bypassSecurityTrustUrl("data:text/json;charset=UTF-8," + encodeURIComponent(newStr));
     this.downloadJsonHref = uri;
   }
 
-  addEvent(node:EventNode){
-    this.dataSource.add({id: "node", failure_rate:0.2, children: [], type: 'event'},node);
-    console.log(node.children.length);
+  addEvent(node:EventNode, type:string, fail:number){
+    this.dataSource.add({id: type, failure_rate:fail, type: type, subelements: []},node);
+    console.log(node.subelements.length);
   }
 
-  addGate(node:EventNode){
-    this.dataSource.add({id: "gate", failure_rate:0.2, children: [], type: 'gate'},node);
-    // this.dataSource.add(name: "BasicEvent", {{id: "gate", failure_rate:0.2, children: [], type: 'gate'}},node)
+  addGate(node:EventNode,type:string, descr?:string,k? : number){
+    this.dataSource.add({id: type, failure_rate:0.2, type: type, k: 2, subelements: []},node);
   }
 
   remove(node: EventNode) {

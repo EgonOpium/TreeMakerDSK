@@ -5,8 +5,9 @@ export interface DialogData {
   id: string;
   type: string;
   failure_rate: number;
-  desc: string;
-  k: number;
+  desc?: string;
+  k?: number;
+  dialog: string;
 }
 
 @Component({
